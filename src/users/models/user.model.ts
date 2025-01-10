@@ -1,23 +1,23 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Post } from '../../posts/models/post.model';
+import { Field, ObjectType, ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
-  @Field(() => Int)
+  @Field(() => ID)
   id: number;
 
   @Field()
   email: string;
 
-  @Field({ nullable: true })
-  name?: string;
-
-  @Field(() => [Post], { nullable: true })
-  posts?: Post[];
+  @Field()
+  name: string;
 
   @Field()
   createdAt: Date;
 
   @Field()
   updatedAt: Date;
+
+  // Password is in the database but not exposed in GraphQL
+  // Do not add @Field() decorator
+  password?: string;
 }

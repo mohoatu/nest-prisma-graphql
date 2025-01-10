@@ -2,9 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthResponse {
+  token: String!
+}
+
+input CreatePostInput {
+  authorId: Int!
+  content: String
+  published: Boolean! = false
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
-  name: String
+  name: String!
+  password: String!
 }
 
 """
@@ -12,8 +24,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  createUser(input: CreateUserInput!): User!
+  createPost(input: CreatePostInput!): Post!
+  deletePost(id: Int!): Post!
+  login(input: LoginInput!): AuthResponse!
+  register(input: CreateUserInput!): AuthResponse!
+  removeUser(id: Int!): User!
+  updatePassword(input: UpdatePasswordInput!): Boolean!
+  updatePost(input: UpdatePostInput!): Post!
+  updateUser(input: UpdateUserInput!): User!
 }
 
 type Post {
@@ -27,16 +51,48 @@ type Post {
   updatedAt: DateTime!
 }
 
+input PostOrder {
+  createdAt: String
+  title: String
+}
+
+input PostWhereInput {
+  authorId: Float
+  published: Boolean
+  title: String
+}
+
 type Query {
-  user(id: Int!): User
-  users: [User!]!
+  me: User!
+  post(id: Int!): Post
+  posts(orderBy: PostOrder, skip: Int, take: Int, where: PostWhereInput): [Post!]!
+  user(id: Int!): User!
+  users(skip: Int, take: Int): [User!]!
+}
+
+input UpdatePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+}
+
+input UpdatePostInput {
+  authorId: Int
+  content: String
+  id: Float!
+  published: Boolean = false
+  title: String
+}
+
+input UpdateUserInput {
+  email: String
+  id: Int!
+  name: String
 }
 
 type User {
   createdAt: DateTime!
   email: String!
-  id: Int!
-  name: String
-  posts: [Post!]
+  id: ID!
+  name: String!
   updatedAt: DateTime!
 }
